@@ -6,7 +6,8 @@ resource "aws_iam_openid_connect_provider" "github_actions_oidc" {
   ]
 
   thumbprint_list = [
-    "d89e3bd43d5d909b47a18977aa9d5ce36cee184c"
+    "d89e3bd43d5d909b47a18977aa9d5ce36cee184c",
+    "6938fd4d98bab03faadb97b34396831e3780aea1"
   ]
 }
 
@@ -23,9 +24,11 @@ resource "aws_iam_role" "github_actions_role" {
         },
         Action = "sts:AssumeRoleWithWebIdentity",
         Condition = {
+          StringLike = {
+            "token.actions.githubusercontent.com:sub" : "repo:nmparfyonov/rsschool-devops-course-tasks:*"
+          },
           StringEquals = {
             "token.actions.githubusercontent.com:aud" : "sts.amazonaws.com",
-            "token.actions.githubusercontent.com:sub" : "repo:nmparfyonov/rsschool-devops-course-tasks:*"
           }
         }
       }
