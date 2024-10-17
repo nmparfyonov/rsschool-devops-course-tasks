@@ -33,3 +33,21 @@ variable "private_subnet_cidrs" {
   type        = list(string)
   default     = ["192.168.3.0/24", "192.168.4.0/24"]
 }
+
+variable "ami" {
+  description = "AMI for EC2 instances"
+  type        = string
+  default     = "ami-0e04bcbe83a83792e"
+}
+
+variable "instance_type" {
+  description = "EC2 instance type"
+  type        = string
+  default     = "t2.micro"
+}
+
+variable "ssh_key_name" {
+  description = "EC2 ssh key name"
+  type        = string
+  default     = "ssh_key"
+}
