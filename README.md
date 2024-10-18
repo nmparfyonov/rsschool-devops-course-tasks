@@ -52,7 +52,9 @@ terraform plan
     * OIDS github provider for githu actions
     * IAM role for github actions
     * VPC with two public and two private subnets in different availability zones
-    * Security Group for kubernetes cluster
+    * Security Groups for private and public subnets
+    * Bastion host for ssh connection
+    * Master and worker nodes for k3s cluster
 ### 5. Destroy resources created
 Use `terraform destroy`. More info see in [documentation](https://developer.hashicorp.com/terraform/cli/commands/destroy)
 ```bash
@@ -71,5 +73,29 @@ Github actions worflow includes following jobs:
     * `AWS_REGION` - AWS region to deploy resources eg. us-east-1
     * `TFSTATE_S3_BUCKET` - AWS S3 bucket name to store terraform state file
     * `TF_S3_BUCKET_NAME` - AWS S3 bucket name to be created using this configuration files
+    * `TF_S3_BUCKET_NAME` - AWS S3 bucket name to be created using this configuration files
 1. Following repository `variables` should be configured:
     * `TF_ENVIRONMENT` - AWS S3 bucket tag
+    * `TF_SSH_KEY_NAME` - AWS EC2 ssh key name
+## K3S Cluster
+### Description
+k3s cluster has following configuration:
+1. Master (control-plane) node
+1. Worker node
+### Setup
+1. Create resources using `terraform apply`
+1. Connect to bastion host with ssh key
+1. Connect Master node with the same ssh key
+1. Get k3s `node-token`:
+    ```bash
+    cat /var/lib/rancher/k3s/server/node-token
+    ```
+1. Connect to worker node using ssh key
+1. Launch k3s-agent:
+    ```bash
+    curl -sfL https://get.k3s.io | K3S_URL=https://${MASTER_NODE_IP}:6443 K3S_TOKEN="${K3S_NODE_TOKEN}" sh -s
+    ```
+1. Deploy any resources using `kubectl`:
+    ```bash
+    kubectl apply -f https://k8s.io/examples/pods/simple-pod.yaml
+    ```
