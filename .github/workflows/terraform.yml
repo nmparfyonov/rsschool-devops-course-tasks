@@ -62,6 +62,7 @@ jobs:
         TF_VAR_s3_bucket_name: ${{ secrets.TF_S3_BUCKET_NAME }}
         TF_VAR_region: ${{ secrets.AWS_REGION }}
         TF_VAR_environment: ${{ vars.TF_ENVIRONMENT }}
+        TF_VAR_ssh_key_name: ${{ vars.TF_SSH_KEY_NAME }}
 
   terraform-apply:
     runs-on: ubuntu-latest
@@ -97,3 +98,4 @@ jobs:
         TF_VAR_s3_bucket_name: ${{ secrets.TF_S3_BUCKET_NAME }}
         TF_VAR_region: ${{ secrets.AWS_REGION }}
         TF_VAR_environment: ${{ vars.TF_ENVIRONMENT }}
+        TF_VAR_ssh_key_name: ${{ vars.TF_SSH_KEY_NAME }}
