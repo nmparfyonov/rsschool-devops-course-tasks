@@ -100,3 +100,36 @@ k3s cluster has following configuration:
     ```bash
     kubectl apply -f https://k8s.io/examples/pods/simple-pod.yaml
     ```
+## EC2 Memory swap
+### Create a swap file
+[Original resource](https://repost.aws/knowledge-center/ec2-memory-swap-file) Complete the following steps:
+
+1. Run the dd command to create a swap file on the root file system. Note: In the command, bs is the block size and count is the number of blocks. The size of the swap file is the block size option multiplied by the count option in the dd command. Adjust these values to determine the swap file size. The block size that you specify must be less than the available memory on the instance, or you receive the memory exhausted error. In the following example dd command, the swap file is 4 GB (128 MB x 32):
+    ```bash
+    sudo dd if=/dev/zero of=/swapfile bs=128M count=32
+    ```
+1. To update the read and write permissions for the swap file, run the following command:
+    ```bash
+    sudo chmod 600 /swapfile
+    ```
+1. To set up a Linux swap space, run the following command:
+    ```bash
+    sudo mkswap /swapfile
+    ```
+1. To add the swap file to swap space and make the swap file available for immediate use, run the following command:
+    ```bash
+    sudo swapon /swapfile
+    ```
+1. To verify that the procedure was successful, run the following command:
+    ```bash
+    sudo swapon -s
+    ```
+1. To start the swap file at boot time, edit the /etc/fstab file. Open the file in the editor, and then run the following command:
+    ```bash
+    sudo vi /etc/fstab
+    ```
+1. Add the following new line at the end of the file:
+    ```bash
+    /swapfile swap swap defaults 0 0
+    ```
+1. Save the file, and then exit.
