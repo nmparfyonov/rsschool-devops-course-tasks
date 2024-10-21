@@ -95,6 +95,7 @@ k3s cluster has following configuration:
     ```bash
     curl -sfL https://get.k3s.io | K3S_URL=https://${MASTER_NODE_IP}:6443 K3S_TOKEN="${K3S_NODE_TOKEN}" sh -s
     ```
+1. Configure `kubectl` on your local host according to this [instruction](https://docs.k3s.io/cluster-access)
 1. Deploy any resources using `kubectl`:
     ```bash
     kubectl apply -f https://k8s.io/examples/pods/simple-pod.yaml
