@@ -51,6 +51,8 @@ terraform plan
     * S3 bucket with parameters from variables passed
     * OIDS github provider for githu actions
     * IAM role for github actions
+    * VPC with two public and two private subnets in different availability zones
+    * Security Group for kubernetes cluster
 ### 5. Destroy resources created
 Use `terraform destroy`. More info see in [documentation](https://developer.hashicorp.com/terraform/cli/commands/destroy)
 ```bash
