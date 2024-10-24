@@ -11,6 +11,22 @@ resource "aws_security_group" "public_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    description = "Allow inbound traffic from public subnets"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = var.public_subnet_cidrs
+  }
+
+  ingress {
+    description = "Allow inbound traffic from private subnets"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = var.private_subnet_cidrs
+  }
+
   egress {
     description = "Allow all outbound traffic"
     from_port   = 0

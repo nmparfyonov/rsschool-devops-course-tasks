@@ -20,6 +20,11 @@ resource "aws_route_table_association" "public_subnet_assoc" {
 resource "aws_route_table" "private_route_table" {
   vpc_id = aws_vpc.main_vpc.id
 
+  route {
+    cidr_block           = "0.0.0.0/0"
+    network_interface_id = aws_instance.bastion.primary_network_interface_id
+  }
+
   tags = {
     Name = "Private Route Table"
   }
