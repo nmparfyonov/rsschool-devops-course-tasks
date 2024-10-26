@@ -40,6 +40,12 @@ variable "ami" {
   default     = "ami-08ec94f928cf25a9d"
 }
 
+variable "ami_username" {
+  description = "EC2 instances username"
+  type        = string
+  default     = "ec2-user"
+}
+
 variable "bastion_instance_type" {
   description = "EC2 instance type"
   type        = string
