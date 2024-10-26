@@ -40,14 +40,30 @@ variable "ami" {
   default     = "ami-08ec94f928cf25a9d"
 }
 
-variable "instance_type" {
+variable "bastion_instance_type" {
   description = "EC2 instance type"
   type        = string
   default     = "t2.micro"
+}
+
+variable "k3s_instance_type" {
+  description = "EC2 instance type"
+  type        = string
+  default     = "t3.medium"
 }
 
 variable "ssh_key_name" {
   description = "EC2 ssh key name"
   type        = string
   default     = "ssh_key"
+}
+
+variable "public_key" {
+  description = "Public SSH key"
+  type        = string
+}
+
+variable "private_key" {
+  description = "Private SSH key"
+  type        = string
 }
