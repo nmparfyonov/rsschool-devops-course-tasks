@@ -24,4 +24,4 @@ jobs:
         run: |
           ssh ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }} "helm repo add bitnami https://charts.bitnami.com/bitnami"
           scp ./jenkins/values.yaml ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }}:
-          ssh ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }} "helm install jenkins bitnami/jenkins --version 13.4.26 -f values.yaml --create-namespace -n jenkins --set jenkinsUser=$JENKINS_USER --set jenkinsPassword=$JENKINS_PASSWORD"
+          ssh ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }} "helm install jenkins bitnami/jenkins --version 13.4.26 -f values.yaml --create-namespace -n jenkins --set jenkinsUser=${{ secrets.JENKINS_USER }} --set jenkinsPassword=${{ secrets.JENKINS_PASSWORD }}"
