@@ -3,7 +3,7 @@ name: Jenkins Pipeline
 on: workflow_dispatch
 
 jobs:
-  longhorn-setup:
+  jenkins-deploy:
     runs-on: ubuntu-latest
 
     steps:
