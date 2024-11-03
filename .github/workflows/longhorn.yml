@@ -21,6 +21,5 @@ jobs:
           ssh-keyscan -t rsa,dsa,ecdsa,ed25519 ${{ secrets.BASTION_IP }} >> /home/runner/.ssh/known_hosts
           
       - name: Deploy longhorn
-        env:
         run: |
           ssh ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }} "kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.6.0/deploy/longhorn.yaml"
