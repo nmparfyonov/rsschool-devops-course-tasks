@@ -65,6 +65,8 @@ jobs:
         TF_VAR_ssh_key_name: ${{ secrets.TF_SSH_KEY_NAME }}
         TF_VAR_public_key: ${{ secrets.TF_PUBLIC_KEY }}
         TF_VAR_private_key: ${{ secrets.TF_PRIVATE_KEY }}
+        TF_VAR_ami_username: ${{ secrets.TF_AMI_USERNAME }}
+
 
   terraform-apply:
     runs-on: ubuntu-latest
@@ -103,3 +105,4 @@ jobs:
         TF_VAR_ssh_key_name: ${{ secrets.TF_SSH_KEY_NAME }}
         TF_VAR_public_key: ${{ secrets.TF_PUBLIC_KEY }}
         TF_VAR_private_key: ${{ secrets.TF_PRIVATE_KEY }}
+        TF_VAR_ami_username: ${{ secrets.TF_AMI_USERNAME }}

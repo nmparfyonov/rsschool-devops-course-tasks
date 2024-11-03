@@ -1,0 +1,26 @@
+name: Longhorn Pipeline
+
+on: workflow_dispatch
+
+jobs:
+  longhorn-setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        shell: bash
+        run: |
+          mkdir -p /home/runner/.ssh/
+          touch /home/runner/.ssh/id_rsa
+          echo -e "${{ secrets.TF_PRIVATE_KEY }}" > /home/runner/.ssh/id_rsa
+          chmod 600 /home/runner/.ssh/id_rsa
+          eval `ssh-agent -s`
+          ssh-keyscan -t rsa,dsa,ecdsa,ed25519 ${{ secrets.BASTION_IP }} >> /home/runner/.ssh/known_hosts
+          
+      - name: Deploy longhorn
+        env:
+        run: |
+          ssh ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }} "kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.6.0/deploy/longhorn.yaml"

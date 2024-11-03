@@ -19,9 +19,11 @@ resource "aws_instance" "bastion" {
               echo "${var.public_key}" >> /home/${var.ami_username}/.ssh/authorized_keys
               curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
               install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+              kubectl completion bash > /etc/bash_completion.d/kubectl
               curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
               chmod 700 get_helm.sh
               ./get_helm.sh
+              helm completion bash > /etc/bash_completion.d/helm
               dnf install -y nginx
               systemctl enable nginx.service
               systemctl start nginx.service
@@ -52,6 +54,8 @@ resource "aws_instance" "k3s-master" {
               k3s_master_ip=$(hostname -I | awk '{print $1}')
               ssh -o StrictHostKeyChecking=no ${var.ami_username}@${aws_instance.bastion.private_ip} "sed -i "s/127.0.0.1/$k3s_master_ip/g" /home/${var.ami_username}/.kube/config"
               ssh -o StrictHostKeyChecking=no root@${aws_instance.k3s-worker.private_ip} "curl -sfL https://get.k3s.io | K3S_URL=https://$k3s_master_ip:6443 K3S_TOKEN=$token sh -"
+              dnf install -y iscsi-initiator-utils
+              systemctl start iscsid.service
               EOF
 
   tags = {
@@ -70,6 +74,8 @@ resource "aws_instance" "k3s-worker" {
   user_data = <<-EOF
               #!/bin/bash
               echo "${var.public_key}" > /root/.ssh/authorized_keys
+              dnf install -y iscsi-initiator-utils
+              systemctl start iscsid.service
               EOF
 
   tags = {
