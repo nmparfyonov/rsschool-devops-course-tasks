@@ -1,0 +1,28 @@
+name: Jenkins Pipeline
+
+on: workflow_dispatch
+
+jobs:
+  longhorn-setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        shell: bash
+        run: |
+          mkdir -p /home/runner/.ssh/
+          touch /home/runner/.ssh/id_rsa
+          echo -e "${{ secrets.TF_PRIVATE_KEY }}" > /home/runner/.ssh/id_rsa
+          chmod 600 /home/runner/.ssh/id_rsa
+          eval `ssh-agent -s`
+          ssh-keyscan -t rsa,dsa,ecdsa,ed25519 ${{ secrets.BASTION_IP }} >> /home/runner/.ssh/known_hosts
+          
+      - name: Deploy jenkins
+        env:
+        run: |
+          ssh ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }} "helm repo add bitnami https://charts.bitnami.com/bitnami"
+          scp ./jenkins/values.yaml ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }}:
+          ssh ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }} "helm install jenkins bitnami/jenkins --version 13.4.26 -f values.yaml --create-namespace -n jenkins --set jenkinsUser=$JENKINS_USER --set jenkinsPassword=$JENKINS_PASSWORD"
