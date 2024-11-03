@@ -52,7 +52,9 @@ terraform plan
     * OIDS github provider for githu actions
     * IAM role for github actions
     * VPC with two public and two private subnets in different availability zones
-    * Security Group for kubernetes cluster
+    * Security Groups for private and public subnets
+    * Bastion host for ssh connection
+    * Master and worker nodes for k3s cluster
 ### 5. Destroy resources created
 Use `terraform destroy`. More info see in [documentation](https://developer.hashicorp.com/terraform/cli/commands/destroy)
 ```bash
@@ -71,5 +73,63 @@ Github actions worflow includes following jobs:
     * `AWS_REGION` - AWS region to deploy resources eg. us-east-1
     * `TFSTATE_S3_BUCKET` - AWS S3 bucket name to store terraform state file
     * `TF_S3_BUCKET_NAME` - AWS S3 bucket name to be created using this configuration files
+    * `TF_S3_BUCKET_NAME` - AWS S3 bucket name to be created using this configuration files
 1. Following repository `variables` should be configured:
     * `TF_ENVIRONMENT` - AWS S3 bucket tag
+    * `TF_SSH_KEY_NAME` - AWS EC2 ssh key name
+## K3S Cluster
+### Description
+k3s cluster has following configuration:
+1. Master (control-plane) node
+1. Worker node
+### Setup
+1. Create resources using `terraform apply`
+1. Connect to bastion host with ssh key
+1. Connect Master node with the same ssh key
+1. Get k3s `node-token`:
+    ```bash
+    cat /var/lib/rancher/k3s/server/node-token
+    ```
+1. Connect to worker node using ssh key
+1. Launch k3s-agent:
+    ```bash
+    curl -sfL https://get.k3s.io | K3S_URL=https://${MASTER_NODE_IP}:6443 K3S_TOKEN="${K3S_NODE_TOKEN}" sh -s
+    ```
+1. Configure `kubectl` on your local host according to this [instruction](https://docs.k3s.io/cluster-access)
+1. Deploy any resources using `kubectl`:
+    ```bash
+    kubectl apply -f https://k8s.io/examples/pods/simple-pod.yaml
+    ```
+## EC2 Memory swap
+### Create a swap file
+[Original resource](https://repost.aws/knowledge-center/ec2-memory-swap-file) Complete the following steps:
+
+1. Run the dd command to create a swap file on the root file system. Note: In the command, bs is the block size and count is the number of blocks. The size of the swap file is the block size option multiplied by the count option in the dd command. Adjust these values to determine the swap file size. The block size that you specify must be less than the available memory on the instance, or you receive the memory exhausted error. In the following example dd command, the swap file is 4 GB (128 MB x 32):
+    ```bash
+    sudo dd if=/dev/zero of=/swapfile bs=128M count=32
+    ```
+1. To update the read and write permissions for the swap file, run the following command:
+    ```bash
+    sudo chmod 600 /swapfile
+    ```
+1. To set up a Linux swap space, run the following command:
+    ```bash
+    sudo mkswap /swapfile
+    ```
+1. To add the swap file to swap space and make the swap file available for immediate use, run the following command:
+    ```bash
+    sudo swapon /swapfile
+    ```
+1. To verify that the procedure was successful, run the following command:
+    ```bash
+    sudo swapon -s
+    ```
+1. To start the swap file at boot time, edit the /etc/fstab file. Open the file in the editor, and then run the following command:
+    ```bash
+    sudo vi /etc/fstab
+    ```
+1. Add the following new line at the end of the file:
+    ```bash
+    /swapfile swap swap defaults 0 0
+    ```
+1. Save the file, and then exit.

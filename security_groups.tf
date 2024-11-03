@@ -1,23 +1,3 @@
-resource "aws_security_group" "k3s_sg" {
-  name        = "k3s-security-group"
-  vpc_id      = aws_vpc.main_vpc.id
-  description = "Security group for the k3s host"
-
-  ingress {
-    from_port   = 6443
-    to_port     = 6443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
 resource "aws_security_group" "public_sg" {
   name        = "public-security-group"
   description = "Security group for public subnet"
@@ -50,11 +30,19 @@ resource "aws_security_group" "private_sg" {
   vpc_id      = aws_vpc.main_vpc.id
 
   ingress {
-    description     = "Allow inbound traffic from public subnets"
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    security_groups = [aws_security_group.public_sg.id]
+    description = "Allow inbound traffic from public subnets"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = var.public_subnet_cidrs
+  }
+
+  ingress {
+    description = "Allow inbound traffic from private subnets"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = var.private_subnet_cidrs
   }
 
   egress {
