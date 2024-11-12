@@ -3,7 +3,7 @@ name: Jenkins Pipeline
 on: workflow_dispatch
 
 jobs:
-  longhorn-setup:
+  jenkins-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,8 +21,7 @@ jobs:
           ssh-keyscan -t rsa,dsa,ecdsa,ed25519 ${{ secrets.BASTION_IP }} >> /home/runner/.ssh/known_hosts
           
       - name: Deploy jenkins
-        env:
         run: |
           ssh ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }} "helm repo add bitnami https://charts.bitnami.com/bitnami"
           scp ./jenkins/values.yaml ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }}:
-          ssh ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }} "helm install jenkins bitnami/jenkins --version 13.4.26 -f values.yaml --create-namespace -n jenkins --set jenkinsUser=$JENKINS_USER --set jenkinsPassword=$JENKINS_PASSWORD"
+          ssh ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }} "helm install jenkins bitnami/jenkins --version 13.4.26 -f values.yaml --create-namespace -n jenkins --set jenkinsUser=${{ secrets.JENKINS_USER }} --set jenkinsPassword=${{ secrets.JENKINS_PASSWORD }}"
