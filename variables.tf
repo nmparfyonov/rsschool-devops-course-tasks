@@ -58,6 +58,12 @@ variable "k3s_instance_type" {
   default     = "t3.medium"
 }
 
+variable "k3s_worker_volume_size" {
+  description = "EC2 k3s worker volume size"
+  type        = number
+  default     = 20
+}
+
 variable "ssh_key_name" {
   description = "EC2 ssh key name"
   type        = string

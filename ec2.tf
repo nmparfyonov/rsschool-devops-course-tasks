@@ -70,7 +70,9 @@ resource "aws_instance" "k3s-worker" {
   associate_public_ip_address = false
   key_name                    = var.ssh_key_name
   vpc_security_group_ids      = [aws_security_group.private_sg.id]
-
+  root_block_device {
+    volume_size = var.k3s_worker_volume_size
+  }
   user_data = <<-EOF
               #!/bin/bash
               echo "${var.public_key}" > /root/.ssh/authorized_keys
