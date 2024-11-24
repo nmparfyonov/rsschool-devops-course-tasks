@@ -10,6 +10,6 @@ export JENKINS_PASSWORD=password
 ```
 1. Install Jenkins helm chart
 ```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install jenkins bitnami/jenkins --version 13.4.26 -f values.yaml --create-namespace -n jenkins --set jenkinsUser=$JENKINS_USER --set jenkinsPassword=$JENKINS_PASSWORD
+helm repo add jenkinsci https://charts.jenkins.io
+helm install jenkins jenkinsci/jenkins --version 5.7.14 -f values.yaml --create-namespace -n jenkins --set controller.admin.username=$JENKINS_USER --set controller.admin.password=$JENKINS_PASSWORD
 ```
