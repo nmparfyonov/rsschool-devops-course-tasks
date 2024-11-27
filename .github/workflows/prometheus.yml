@@ -20,3 +20,10 @@ jobs:
           eval `ssh-agent -s`
           ssh-keyscan -t rsa,dsa,ecdsa,ed25519 ${{ secrets.BASTION_IP }} >> /home/runner/.ssh/known_hosts
           
+      - name: Deploy prometheus
+        run: |
+          ssh ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }} "helm repo add bitnami https://charts.bitnami.com/bitnami"
+          scp ./prometheus/values.yaml ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }}:
+          ssh ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }} "helm upgrade --install node-exporters bitnami/node-exporter --version ${{ vars.HELM_NODE_EXPORTER_VERSION }} --create-namespace -n  monitoring"
+          ssh ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }} "helm upgrade --install prometheus bitnami/prometheus --version ${{ vars.HELM_PROMETHEUS_VERSION }} -n  monitoring -f values.yaml"
+          
