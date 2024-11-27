@@ -1,0 +1,22 @@
+name: Prometheus Pipeline
+
+on: workflow_dispatch
+
+jobs:
+  prometheus-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        shell: bash
+        run: |
+          mkdir -p /home/runner/.ssh/
+          touch /home/runner/.ssh/id_rsa
+          echo -e "${{ secrets.TF_PRIVATE_KEY }}" > /home/runner/.ssh/id_rsa
+          chmod 600 /home/runner/.ssh/id_rsa
+          eval `ssh-agent -s`
+          ssh-keyscan -t rsa,dsa,ecdsa,ed25519 ${{ secrets.BASTION_IP }} >> /home/runner/.ssh/known_hosts
+          
