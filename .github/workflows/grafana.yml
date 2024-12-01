@@ -1,9 +1,6 @@
 name: Grafana Pipeline
 
-on:
-  push:
-    branches:
-      - feat/task-8
+on: workflow_dispatch
 
 jobs:
   grafana-deploy:
@@ -27,6 +24,6 @@ jobs:
         run: |
           scp ./grafana/values.yaml ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }}:
           scp ./grafana/kubernetes_dashboard.json ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }}:
-          ssh ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }} "kubectl create configmap grafana-kubernetes-dashboard -n monitoring --from-file=kubernetes_dashboard.json"
+          ssh ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }} "kubectl create configmap grafana-kubernetes-dashboard -n monitoring --from-file=kubernetes_dashboard.json -o yaml --dry-run | kubectl apply -f -"
           ssh ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }} "helm repo add bitnami https://charts.bitnami.com/bitnami"
           ssh ${{ secrets.TF_AMI_USERNAME }}@${{ secrets.BASTION_IP }} "helm upgrade --install grafana bitnami/grafana --version ${{ vars.HELM_GRAFANA_VERSION }} --create-namespace -n monitoring -f values.yaml --set admin.user=\"${{ secrets.GRAFANA_USER }}\" --set admin.password=\"${{ secrets.GRAFANA_PASSWORD }}\""
