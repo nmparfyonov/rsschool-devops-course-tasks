@@ -39,7 +39,7 @@ Github actions worflow includes following steps:
     * `TF_PRIVATE_KEY` - private ssh key to access host with `kubectl` and `helm` configured
     * `BASTION_IP` - host ip with `kubectl` and `helm` configured
     * `TF_AMI_USERNAME` - host username
-1. Following repository `variables` should be configured:
-    * `HELM_GRAFANA_VERSION` - bitnami grafana helm chart version
     * `GRAFANA_USER` - grafana admin username
     * `GRAFANA_PASSWORD` - grafana admin password
+1. Following repository `variables` should be configured:
+    * `HELM_GRAFANA_VERSION` - bitnami grafana helm chart version
