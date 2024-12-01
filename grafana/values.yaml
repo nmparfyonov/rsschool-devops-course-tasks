@@ -1,7 +1,7 @@
 service:
   type: NodePort
   nodePorts:
-    http: "30090"
+    grafana: "30090"
 ingress:
   enabled: true
 datasources:
