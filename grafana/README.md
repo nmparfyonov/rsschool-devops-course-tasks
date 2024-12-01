@@ -6,28 +6,28 @@
 ## Deploy grafana
 ### Manual
 1. Add bitnami helm chart repo
-```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
-```
+    ```bash
+    helm repo add bitnami https://charts.bitnami.com/bitnami
+    ```
 1. Create `monitoring` namespace
-```bash
-kubectl create namespace monitoring
-```
+    ```bash
+    kubectl create namespace monitoring
+    ```
 1. Copy [`kubernetes_dashboard.json`](./kubernetes_dashboard.json)
 1. Create configmap with kubernetes dashboard
-```bash
-kubectl create configmap grafana-kubernetes-dashboard -n monitoring --from-file=kubernetes_dashboard.json
-```
+    ```bash
+    kubectl create configmap grafana-kubernetes-dashboard -n monitoring --from-file=kubernetes_dashboard.json
+    ```
 1. Copy [`values.yaml`](./values.yaml) file and edit [prometheus url](./values.yaml#L13)
 1. Set following env to create credentials for Grafana
-```bash
-export GRAFANA_USER=grafana
-export GRAFANA_PASSWORD=grafana
-```
+    ```bash
+    export GRAFANA_USER=grafana
+    export GRAFANA_PASSWORD=grafana
+    ```
 1. Deploy grafana
-```bash
-helm upgrade --install grafana bitnami/grafana --version 11.3.26 -n  monitoring -f values.yaml --set admin.user="$GRAFANA_USER" --set admin.password="$GRAFANA_PASSWORD"
-```
+    ```bash
+    helm upgrade --install grafana bitnami/grafana --version 11.3.26 -n  monitoring -f values.yaml --set admin.user="$GRAFANA_USER" --set admin.    password="$GRAFANA_PASSWORD"
+    ```
 1. Grafana with default configuration [`values.yaml`](./values.yaml) file will be available on node port **30090**
 ## Github Actions workflow
 ### Description
