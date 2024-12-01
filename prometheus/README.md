@@ -2,7 +2,7 @@
 ## Prerequisites
 1. `k3s` cluster up and running
 1. `helm installed`
-## Deploy Jenkins
+## Deploy Prometheus
 ### Manual
 1. Add bitnami helm chart repo
 ```bash
