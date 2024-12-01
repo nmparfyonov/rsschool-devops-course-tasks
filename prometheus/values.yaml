@@ -3,3 +3,5 @@ prometheus:
     type: NodePort
     nodePorts:
       http: "30080"
+  ingress:
+    enabled: true
