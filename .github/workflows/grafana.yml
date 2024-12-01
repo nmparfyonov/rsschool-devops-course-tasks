@@ -1,6 +1,9 @@
 name: Grafana Pipeline
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - feat/task-8
 
 jobs:
   grafana-deploy:
