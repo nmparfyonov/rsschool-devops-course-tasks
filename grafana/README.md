@@ -24,9 +24,17 @@
     export GRAFANA_USER=grafana
     export GRAFANA_PASSWORD=grafana
     ```
+1. Create secret with admin password
+    ```bash
+    kubectl create secret generic grafana-admin-secret --from-literal=password="$GRAFANA_PASSWORD" -n monitoring
+    ```
+    * Check password
+        ```bash
+        kubectl get secret grafana-admin-secret -n monitoring -o jsonpath="{.data.password}"
+        ```
 1. Deploy grafana
     ```bash
-    helm upgrade --install grafana bitnami/grafana --version 11.3.26 -n  monitoring -f values.yaml --set admin.user="$GRAFANA_USER" --set admin.    password="$GRAFANA_PASSWORD"
+    helm upgrade --install grafana bitnami/grafana --version 11.3.26 -n  monitoring -f values.yaml --set admin.user="$GRAFANA_USER"
     ```
 1. Grafana with default configuration [`values.yaml`](./values.yaml) file will be available on node port **30090**
 ## Github Actions workflow
