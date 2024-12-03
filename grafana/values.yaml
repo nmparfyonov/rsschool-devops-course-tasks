@@ -17,3 +17,6 @@ dashboardsProvider:
 dashboardsConfigMaps:
   - configMapName: grafana-kubernetes-dashboard
     fileName: kubernetes_dashboard.json
+admin:
+  existingSecret: "grafana-admin-secret"
+  existingSecretPasswordKey: password
