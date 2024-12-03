@@ -1,0 +1,22 @@
+service:
+  type: NodePort
+  nodePorts:
+    grafana: "30090"
+ingress:
+  enabled: true
+datasources:
+  secretDefinition:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-kube-prometheus-prometheus:9090
+      isDefault: true
+dashboardsProvider:
+  enabled: true
+dashboardsConfigMaps:
+  - configMapName: grafana-kubernetes-dashboard
+    fileName: kubernetes_dashboard.json
+admin:
+  existingSecret: "grafana-admin-secret"
+  existingSecretPasswordKey: password
