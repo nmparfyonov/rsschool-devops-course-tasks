@@ -30,7 +30,7 @@
     ```
     * Check password
         ```bash
-        kubectl get secret grafana-admin-secret -n monitoring -o jsonpath="{.data.password}"
+        kubectl get secret grafana-admin-secret -n monitoring -o jsonpath="{.data.password}" | base64 --decode
         ```
 1. Deploy grafana
     ```bash
