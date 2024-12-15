@@ -1,12 +1,13 @@
-name: Terraform Pipeline
+name: Infrastructure Pipeline
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     branches:
+#       - main
+on: workflow_dispatch
 
 permissions:
   id-token: write
