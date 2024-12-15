@@ -1,0 +1,7 @@
+prometheus:
+  service:
+    type: NodePort
+    nodePorts:
+      http: "30080"
+  ingress:
+    enabled: true
