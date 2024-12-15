@@ -23,6 +23,7 @@ admin:
 smtp:
   enabled: true
   fromName: "Grafana Alert"
+  fromAddress: SMTP_SEND_EMAIL
   existingSecret: "grafana-smtp-secret"
-  host: "email-smtp.eu-central-1.amazonaws.com:587"
+  host: SMTP_SEND_HOST
   skipVerify: "true"
