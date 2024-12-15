@@ -23,4 +23,5 @@ admin:
 smtp:
   enabled: true
   fromName: "Grafana Alert"
+  host: "email-smtp.eu-central-1.amazonaws.com:587"
   skipVerify: "true"
