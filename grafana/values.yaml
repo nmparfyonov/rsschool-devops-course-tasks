@@ -27,3 +27,5 @@ smtp:
   existingSecret: "grafana-smtp-secret"
   host: SMTP_SEND_HOST
   skipVerify: "true"
+alerting:
+  configMapName: "grafana-alertmanager-config"
