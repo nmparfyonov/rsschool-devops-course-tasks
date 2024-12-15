@@ -20,3 +20,7 @@ dashboardsConfigMaps:
 admin:
   existingSecret: "grafana-admin-secret"
   existingSecretPasswordKey: password
+smtp:
+  enabled: true
+  fromName: "Grafana Alert"
+  skipVerify: "true"
