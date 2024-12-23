@@ -56,6 +56,8 @@ resource "aws_instance" "k3s-master" {
               ssh -o StrictHostKeyChecking=no root@${aws_instance.k3s-worker.private_ip} "curl -sfL https://get.k3s.io | K3S_URL=https://$k3s_master_ip:6443 K3S_TOKEN=$token sh -"
               dnf install -y iscsi-initiator-utils
               systemctl start iscsid.service
+              ssh -o StrictHostKeyChecking=no ${var.ami_username}@${aws_instance.bastion.private_ip} "echo "$k3s_master_ip master.k3s" | sudo tee -a /etc/hosts"
+              ssh -o StrictHostKeyChecking=no ${var.ami_username}@${aws_instance.bastion.private_ip} "echo "${aws_instance.k3s-worker.private_ip} worker.k3s" | sudo tee -a /etc/hosts"
               EOF
 
   tags = {

@@ -20,3 +20,12 @@ dashboardsConfigMaps:
 admin:
   existingSecret: "grafana-admin-secret"
   existingSecretPasswordKey: password
+smtp:
+  enabled: true
+  fromName: "Grafana Alert"
+  fromAddress: SMTP_SEND_EMAIL
+  existingSecret: "grafana-smtp-secret"
+  host: SMTP_SEND_HOST
+  skipVerify: "true"
+alerting:
+  configMapName: "grafana-alertmanager-config"
